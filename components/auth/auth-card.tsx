@@ -1,13 +1,3 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { MessageSquare } from "lucide-react";
-
 interface AuthCardProps {
   title: string;
   description: string;
@@ -17,16 +7,13 @@ interface AuthCardProps {
 
 export function AuthCard({ title, description, children, footer }: AuthCardProps) {
   return (
-    <Card className="w-full max-w-md">
-      <CardHeader className="text-center">
-        <div className="flex justify-center mb-2">
-          <MessageSquare className="h-8 w-8 text-primary" />
-        </div>
-        <CardTitle className="text-xl">{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <CardContent>{children}</CardContent>
-      {footer && <CardFooter className="flex-col gap-2">{footer}</CardFooter>}
-    </Card>
+    <div className="space-y-6">
+      <div className="space-y-2">
+        <h1 className="text-2xl font-bold tracking-tight">{title}</h1>
+        <p className="text-muted-foreground text-sm">{description}</p>
+      </div>
+      <div>{children}</div>
+      {footer && <div className="text-center">{footer}</div>}
+    </div>
   );
 }

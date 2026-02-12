@@ -8,7 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Loader2 } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
+import { Loader2, Facebook, Sparkles } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
 export default function SignupPage() {
@@ -39,23 +40,10 @@ export default function SignupPage() {
 
     try {
       const supabase = createClient();
-      const { error } = await supabase.auth.signUp({
-        email,
-        password,
-      });
-
-      if (error) {
-        setError(error.message);
-        return;
-      }
-
-      // If email confirmation is enabled in Supabase, show success message
-      // Otherwise, redirect to dashboard
+      const { error } = await supabase.auth.signUp({ email, password });
+      if (error) { setError(error.message); return; }
       setSuccess(true);
-      setTimeout(() => {
-        router.push("/dashboard");
-        router.refresh();
-      }, 1000);
+      setTimeout(() => { router.push("/dashboard"); router.refresh(); }, 1000);
     } catch {
       setError("An unexpected error occurred. Please try again.");
     } finally {
@@ -66,18 +54,19 @@ export default function SignupPage() {
   return (
     <AuthCard
       title="Create your account"
-      description="Get started with ChatGate for free"
+      description="Get started with ChatGate for free — no credit card required"
       footer={
         <p className="text-sm text-muted-foreground">
           Already have an account?{" "}
-          <Link href="/login" className="text-primary hover:underline font-medium">
+          <Link href="/login" className="text-primary hover:underline font-semibold">
             Log in
           </Link>
         </p>
       }
     >
       {success ? (
-        <Alert>
+        <Alert className="border-emerald-200 bg-emerald-50 text-emerald-800 animate-scale-in">
+          <Sparkles className="h-4 w-4 text-emerald-600" />
           <AlertDescription>
             Account created successfully! Check your email for a confirmation link,
             or you&apos;ll be redirected shortly.
@@ -86,55 +75,52 @@ export default function SignupPage() {
       ) : (
         <form onSubmit={handleSubmit} className="space-y-4">
           {error && (
-            <Alert variant="destructive">
+            <Alert variant="destructive" className="animate-scale-in">
               <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}
           <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email" className="text-sm font-medium">Email</Label>
             <Input
-              id="email"
-              type="email"
-              placeholder="you@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              disabled={loading}
+              id="email" type="email" placeholder="you@example.com"
+              value={email} onChange={(e) => setEmail(e.target.value)}
+              required disabled={loading} className="h-11"
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor="password" className="text-sm font-medium">Password</Label>
             <Input
-              id="password"
-              type="password"
-              placeholder="At least 6 characters"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              disabled={loading}
+              id="password" type="password" placeholder="At least 6 characters"
+              value={password} onChange={(e) => setPassword(e.target.value)}
+              required disabled={loading} className="h-11"
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="confirm-password">Confirm Password</Label>
+            <Label htmlFor="confirm-password" className="text-sm font-medium">Confirm Password</Label>
             <Input
-              id="confirm-password"
-              type="password"
-              placeholder="Repeat your password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-              disabled={loading}
+              id="confirm-password" type="password" placeholder="Repeat your password"
+              value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}
+              required disabled={loading} className="h-11"
             />
           </div>
-          <Button type="submit" className="w-full" disabled={loading}>
+          <Button type="submit" className="w-full h-11 gradient-primary border-0 text-white shadow-lg shadow-primary/20" disabled={loading}>
             {loading ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Creating account...
-              </>
+              <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Creating account...</>
             ) : (
               "Create Account"
             )}
+          </Button>
+
+          <div className="relative my-6">
+            <Separator />
+            <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-background px-3 text-xs text-muted-foreground">
+              or
+            </span>
+          </div>
+
+          <Button type="button" variant="outline" className="w-full h-11" disabled>
+            <Facebook className="mr-2 h-4 w-4 text-blue-600" />
+            Continue with Facebook
           </Button>
         </form>
       )}

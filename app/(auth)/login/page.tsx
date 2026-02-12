@@ -8,7 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Loader2 } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
+import { Loader2, Facebook } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
 function LoginForm() {
@@ -25,19 +26,10 @@ function LoginForm() {
     e.preventDefault();
     setError(null);
     setLoading(true);
-
     try {
       const supabase = createClient();
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-
-      if (error) {
-        setError(error.message);
-        return;
-      }
-
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) { setError(error.message); return; }
       router.push(redirectTo);
       router.refresh();
     } catch {
@@ -50,12 +42,12 @@ function LoginForm() {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       {error && (
-        <Alert variant="destructive">
+        <Alert variant="destructive" className="animate-scale-in">
           <AlertDescription>{error}</AlertDescription>
         </Alert>
       )}
       <div className="space-y-2">
-        <Label htmlFor="email">Email</Label>
+        <Label htmlFor="email" className="text-sm font-medium">Email</Label>
         <Input
           id="email"
           type="email"
@@ -64,10 +56,11 @@ function LoginForm() {
           onChange={(e) => setEmail(e.target.value)}
           required
           disabled={loading}
+          className="h-11"
         />
       </div>
       <div className="space-y-2">
-        <Label htmlFor="password">Password</Label>
+        <Label htmlFor="password" className="text-sm font-medium">Password</Label>
         <Input
           id="password"
           type="password"
@@ -76,17 +69,27 @@ function LoginForm() {
           onChange={(e) => setPassword(e.target.value)}
           required
           disabled={loading}
+          className="h-11"
         />
       </div>
-      <Button type="submit" className="w-full" disabled={loading}>
+      <Button type="submit" className="w-full h-11 gradient-primary border-0 text-white shadow-lg shadow-primary/20" disabled={loading}>
         {loading ? (
-          <>
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            Logging in...
-          </>
+          <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Logging in...</>
         ) : (
           "Log in"
         )}
+      </Button>
+
+      <div className="relative my-6">
+        <Separator />
+        <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-background px-3 text-xs text-muted-foreground">
+          or
+        </span>
+      </div>
+
+      <Button type="button" variant="outline" className="w-full h-11" disabled>
+        <Facebook className="mr-2 h-4 w-4 text-blue-600" />
+        Continue with Facebook
       </Button>
     </form>
   );
@@ -100,7 +103,7 @@ export default function LoginPage() {
       footer={
         <p className="text-sm text-muted-foreground">
           Don&apos;t have an account?{" "}
-          <Link href="/signup" className="text-primary hover:underline font-medium">
+          <Link href="/signup" className="text-primary hover:underline font-semibold">
             Sign up
           </Link>
         </p>
