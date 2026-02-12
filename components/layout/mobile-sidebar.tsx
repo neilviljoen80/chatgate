@@ -3,13 +3,25 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, LayoutDashboard, Link2, Settings, MessageSquare } from "lucide-react";
+import {
+  Menu,
+  LayoutDashboard,
+  Link2,
+  Settings,
+  MessageSquare,
+  Inbox,
+  Zap,
+  Users,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 
 const navItems = [
   { title: "Overview", href: "/dashboard", icon: LayoutDashboard },
+  { title: "Inbox", href: "/dashboard/inbox", icon: Inbox },
+  { title: "Subscribers", href: "/dashboard/subscribers", icon: Users },
+  { title: "Flows", href: "/dashboard/flows", icon: Zap },
   { title: "Connect", href: "/dashboard/connect", icon: Link2 },
   { title: "Settings", href: "/dashboard/settings", icon: Settings },
 ];
